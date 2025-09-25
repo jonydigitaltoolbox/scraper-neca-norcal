@@ -1,11 +1,10 @@
 import { Actor, PlaywrightCrawler, log } from 'apify';
-import { decode } from 'html-entities';
 
 const DEFAULT_URL = 'https://norcalneca.org/membership/member-directory/';
 
 await Actor.init();
 
-const input = await Actor.getInput() || {};
+const input = (await Actor.getInput()) || {};
 const startUrl = input.startUrl || DEFAULT_URL;
 
 const crawler = new PlaywrightCrawler({
@@ -19,10 +18,9 @@ const crawler = new PlaywrightCrawler({
     await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1000);
 
+    // Expand common toggle/accordion patterns
     await page.evaluate(() => {
-      try {
-        document.querySelectorAll('details').forEach(d => d.open = true);
-      } catch {}
+      try { document.querySelectorAll('details').forEach(d => d.open = true); } catch {}
       const selectors = [
         '[aria-expanded="false"]',
         '.accordion .accordion-header',
@@ -31,9 +29,7 @@ const crawler = new PlaywrightCrawler({
         '.toggle, .accordion-title, .accordion-button'
       ];
       selectors.forEach(sel => {
-        document.querySelectorAll(sel).forEach(el => {
-          try { el.click(); } catch {}
-        });
+        document.querySelectorAll(sel).forEach(el => { try { el.click(); } catch {} });
       });
     });
 
@@ -54,23 +50,22 @@ const crawler = new PlaywrightCrawler({
         const website = websiteEl ? websiteEl.href : null;
 
         const emails = uniq(Array.from(block.querySelectorAll('a[href^="mailto:"]')).map(x => x.href.replace(/^mailto:/i, '').trim()));
-        const phoneTextLines = (block.innerText || '').split('\n').map(t => t.trim()).filter(Boolean);
+        const lines = (block.innerText || '').split('\n').map(t => t.trim()).filter(Boolean);
 
-        const name = clean(phoneTextLines[0] || null);
-        const city = clean(phoneTextLines[1] || null);
-        const workPhone = clean((phoneTextLines.find(l => /^Work Phone:/i.test(l)) || '').replace(/^[^:]*:\s*/, '')) || null;
-        const faxPhone  = clean((phoneTextLines.find(l => /^Fax Phone:/i.test(l)) || '').replace(/^[^:]*:\s*/, '')) || null;
+        const name = clean(lines[0] || null);
+        const city = clean(lines[1] || null);
+        const workPhone = clean((lines.find(l => /^Work Phone:/i.test(l)) || '').replace(/^[^:]*:\s*/, '')) || null;
+        const faxPhone  = clean((lines.find(l => /^Fax Phone:/i.test(l)) || '').replace(/^[^:]*:\s*/, '')) || null;
 
-        const out = {
+        blocks.push({
           company: name,
-          city: city,
-          website: website,
-          emails: emails,
+          city,
+          website,
+          emails,
           phone_work: workPhone,
           phone_fax: faxPhone,
           vcard_url: a.href || null
-        };
-        blocks.push(out);
+        });
       }
       return blocks;
     });

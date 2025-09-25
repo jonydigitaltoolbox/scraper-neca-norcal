@@ -1,0 +1,13 @@
+{
+  "title": "NorCal NECA Member Directory Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrl": {
+      "title": "Start URL",
+      "type": "string",
+      "default": "https://norcalneca.org/membership/member-directory/",
+      "description": "Where to start scraping."
+    }
+  }
+}

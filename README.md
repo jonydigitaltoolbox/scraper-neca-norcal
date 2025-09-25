@@ -1,11 +1,20 @@
-# NorCal NECA Member Directory Scraper
+# NorCal NECA Member Directory Scraper (Apify Actor)
 
-Scrapes the full member list (including details revealed when toggled).
+This version switches the base image to GHCR to avoid Docker Hub `unauthorized: authentication required` errors during Apify builds.
 
-## Run locally
+## Quick start on Apify
+1. Create Actor → Import from GitHub (this repo) or upload zip.
+2. **Build** (no Docker Hub auth needed).
+3. **Run** with default input or set `startUrl`.
+
+## Input schema
+`INPUT_SCHEMA.json` is included so the console shows a Start URL field.
+
+## Local run
 ```bash
-npm install
+npm i
 npm run local
 ```
 
-Results saved in `./apify_storage/datasets/default`
+## Changelog
+- 2025-09-25 — Use `ghcr.io/apify/actor-node-playwright-chrome:latest` base, add `INPUT_SCHEMA.json`.
