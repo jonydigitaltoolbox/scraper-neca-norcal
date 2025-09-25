@@ -1,0 +1,14 @@
+{
+  "name": "norcal-neca-member-directory-scraper",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Apify actor to scrape NorCal NECA Member Directory",
+  "scripts": {
+    "start": "node main.js",
+    "local": "APIFY_LOCAL_STORAGE_DIR=./apify_storage node main.js"
+  },
+  "dependencies": {
+    "apify": "^3.2.2",
+    "html-entities": "^2.5.2"
+  }
+}

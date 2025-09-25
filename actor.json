@@ -1,0 +1,15 @@
+{
+  "actorSpecification": 1,
+  "name": "norcal-neca-member-directory-scraper",
+  "title": "NorCal NECA Member Directory Scraper",
+  "description": "Scrapes the member directory with all toggled details.",
+  "version": "0.0.1",
+  "buildTag": "latest",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1
+    }
+  },
+  "environmentVariables": [],
+  "dockerfile": "Dockerfile"
+}
